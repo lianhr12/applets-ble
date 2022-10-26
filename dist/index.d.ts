@@ -1,5 +1,3 @@
-export { default as EventEmitter2 } from 'eventemitter2';
-
 interface BLEEmitter {
     on: (channelType: string, data: any) => void;
     emit: (channelType: string, data: any) => void;
@@ -14,13 +12,10 @@ declare class BleCore {
     notifyCharacteristicId: string;
     deviceId: string;
     serviceId: string;
+    clientType: EClientType;
     module: any;
-    constructor(bleName: any, emitter: any);
+    constructor(options: IBleOptions, emitter: any);
     getModule(): {
-        print: (str: any) => void;
-        promisify: (fn: any, args?: any) => Promise<unknown>;
-        promisifyCallback: (fn: any) => Promise<unknown>;
-        modBusCRC16: (data: any, startIdx: any, endIdx: any) => number;
         onBLEConnectionStateChange: (this: any) => any;
         openAdapter: () => Promise<unknown[] | string[]>;
         closeAdapter: () => Promise<unknown[] | string[]>;
@@ -33,7 +28,6 @@ declare class BleCore {
         getCharacteristics: (this: any) => Promise<any[] | string[]>;
         notifyBleCharacteristicValueChange: (this: any) => Promise<unknown[] | string[]>;
         onBleCharacteristicValueChange: (this: any) => any;
-        cleanSentOrder: (mudata: any, cmd: any) => any[];
         writeBLECharacteristicValue: (this: any, mudata: any) => Promise<unknown[] | string[]>;
     };
     onBleConnectionStateChange(): Promise<boolean>;
@@ -51,8 +45,17 @@ declare class BleCore {
     sentOrder(mudata: any, cmd: any): Promise<boolean>;
 }
 
+declare enum EClientType {
+    weixin = 0,
+    uniapp = 1
+}
+interface IBleOptions {
+    bleName: string[];
+    serviceIdCondition: string;
+    clientType: EClientType;
+}
 declare class Ble extends BleCore {
-    constructor(bleName: any, emitter: any);
+    constructor(options: IBleOptions, emitter: any);
     listen(callback: (data: any) => void): void;
     removeListen(): void;
     init(): Promise<void>;
@@ -60,4 +63,6 @@ declare class Ble extends BleCore {
     close(): Promise<void>;
 }
 
-export { Ble as BLE };
+declare function createBle(options: IBleOptions): Ble;
+
+export { createBle };

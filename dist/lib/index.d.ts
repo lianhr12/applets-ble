@@ -1,3 +1,4 @@
 import BLE from './ble';
-import EventEmitter2 from 'eventemitter2';
-export { BLE, EventEmitter2 };
+import { IBleOptions } from './ble';
+declare function createBle(options: IBleOptions): BLE;
+export { createBle, };

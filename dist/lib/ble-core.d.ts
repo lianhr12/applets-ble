@@ -1,3 +1,4 @@
+import { IBleOptions, EClientType } from './ble';
 interface BLEEmitter {
     on: (channelType: string, data: any) => void;
     emit: (channelType: string, data: any) => void;
@@ -12,13 +13,10 @@ declare class BleCore {
     notifyCharacteristicId: string;
     deviceId: string;
     serviceId: string;
+    clientType: EClientType;
     module: any;
-    constructor(bleName: any, emitter: any);
+    constructor(options: IBleOptions, emitter: any);
     getModule(): {
-        print: (str: any) => void;
-        promisify: (fn: any, args?: any) => Promise<unknown>;
-        promisifyCallback: (fn: any) => Promise<unknown>;
-        modBusCRC16: (data: any, startIdx: any, endIdx: any) => number;
         onBLEConnectionStateChange: (this: any) => any;
         openAdapter: () => Promise<string[] | unknown[]>;
         closeAdapter: () => Promise<string[] | unknown[]>;
@@ -31,7 +29,6 @@ declare class BleCore {
         getCharacteristics: (this: any) => Promise<any[] | string[]>;
         notifyBleCharacteristicValueChange: (this: any) => Promise<string[] | unknown[]>;
         onBleCharacteristicValueChange: (this: any) => any;
-        cleanSentOrder: (mudata: any, cmd: any) => any[];
         writeBLECharacteristicValue: (this: any, mudata: any) => Promise<string[] | unknown[]>;
     };
     onBleConnectionStateChange(): Promise<boolean>;
