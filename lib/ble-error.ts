@@ -3,6 +3,7 @@ interface IBleError extends Error {
 }
 export default function getErrorMsg(err: IBleError): string {
   const errCodeMsgMaps = {
+    "10000": "未初始化蓝牙适配器",
     "10001": "当前蓝牙适配器不可用",
     "10002": "没有找到指定设备",
     "10003": "连接失败",
@@ -12,6 +13,8 @@ export default function getErrorMsg(err: IBleError): string {
     "10007": "当前特征值不支持此操作",
     "10008": "其余所有系统上报的异常",
     "10009": "Android 系统特有，系统版本低于 4.3 不支持 BLE",
+    "10010": "已连接设备",
+    "10011": "配对设备需要配对码",
     "10012": "连接超时",
     "10013": "连接 deviceId 为空或者是格式不正确",
   }
