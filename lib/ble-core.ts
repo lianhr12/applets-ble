@@ -1,4 +1,6 @@
+import { IBleOptions } from './ble';
 import wxble from './ble-weixin-api';
+import { cleanSentOrder } from './utils';
 
 interface BLEEmitter {
   on: (channelType: string, data: any) => void;
@@ -19,7 +21,12 @@ class BleCore {
 
   module; // 适配器的模块
 
-  constructor(bleName, emitter) {
+  constructor(options: IBleOptions, emitter) {
+    const {
+      bleName,
+      serviceIdCondition
+    } = options;
+
     this.bleName = bleName;
     this.emitter = emitter;
 
@@ -27,7 +34,7 @@ class BleCore {
     this.writeCharacteristicId = "";
     this.notifyCharacteristicId = "";
     this.deviceId = "";
-    this.serviceIdCondition = "0000FFF"
+    this.serviceIdCondition = serviceIdCondition || "";
     this.serviceId = ""; // 通过条件查找符合的serverid
     
     this.module = this.getModule();
@@ -175,7 +182,7 @@ class BleCore {
 
   // 发送指令
   async sentOrder(mudata, cmd) {
-    let data = this.module.cleanSentOrder(mudata, cmd);
+    let data = cleanSentOrder(mudata, cmd);
     console.log("-- 发送数据:", data)
     let arrayBuffer = new Uint8Array(data).buffer;
     let [err] = await this.module.writeBLECharacteristicValue.call(this, arrayBuffer)

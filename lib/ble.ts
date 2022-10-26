@@ -1,8 +1,18 @@
 import BleCore from './ble-core';
 
+export enum EClientType {
+  weixin=0,
+  uniapp=1,
+}
+export interface IBleOptions {
+  bleName: string[]; // 匹配蓝牙硬件名称集合
+  serviceIdCondition: string; // 查找serviceId的条件值
+  clientType: EClientType; // 使用API的环境，微信和uniapp
+}
+
 class Ble extends BleCore {
-  constructor(bleName, emitter) {
-    super(bleName, emitter);
+  constructor(options: IBleOptions, emitter) {
+    super(options, emitter);
   }
 
   listen(callback: (data: any) => void): void {
