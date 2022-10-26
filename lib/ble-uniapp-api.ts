@@ -3,7 +3,7 @@ import { promisify, print } from './utils';
 
 function openAdapter() {
   print(`准备初始化蓝牙适配器...`);
-  return promisify(wx.openBluetoothAdapter)
+  return promisify(uni.openBluetoothAdapter)
   .then((res) => {
     print(`√ 适配器初始化成功`);
     return [null, res];
@@ -17,7 +17,7 @@ function openAdapter() {
 // 关闭蓝牙适配器
 function closeAdapter() {
   print(`释放蓝牙适配器...`);
-  return promisify(wx.closeBluetoothAdapter)
+  return promisify(uni.closeBluetoothAdapter)
   .then((res) => {
     print(`√ 释放适配器成功！`);
     return [null, res];
@@ -30,7 +30,7 @@ function closeAdapter() {
 
 function startSearchBle() {
   print(`准备搜索附近的蓝牙外围设备...`);
-  return promisify(wx.startBluetoothDevicesDiscovery,
+  return promisify(uni.startBluetoothDevicesDiscovery,
   {
     allowDuplicatesKey: true,
     interval: 1000
@@ -59,12 +59,12 @@ function onBLEConnectionStateChange(this: any) {
 
 function _onBLEConnectionStateChange(this: any) {
   return new Promise((resolve, reject) => {
-    wx.onBLEConnectionStateChange((result) => {
+    uni.onBLEConnectionStateChange((result) => {
       // 该方法回调中，可以用于处理连接意外断开等异常情况
       if (!result.connected) {
         this.closeBleAdapter();
         // 更新蓝牙状态
-        wx.setStorageSync("bluestatus", "");
+        uni.setStorageSync("bluestatus", "");
         this.emitter.emit('channel', {
           type: 'connect',
           data: "蓝牙已断开"
@@ -91,7 +91,7 @@ function onBluetoothFound(this: any) {
 function _onBluetoothFoundPromise(this: any) {
   let count = 0;
   return new Promise((resolve, reject) => {
-    wx.onBluetoothDeviceFound((result) => {
+    uni.onBluetoothDeviceFound((result) => {
       const devices = result.devices;
       count++;
       if (count > 1) {
@@ -111,7 +111,7 @@ function _onBluetoothFoundPromise(this: any) {
 
 function stopSearchBle() {
   print(`停止查找新设备...`);
-  return promisify(wx.stopBluetoothDevicesDiscovery)
+  return promisify(uni.stopBluetoothDevicesDiscovery)
   .then((res) => {
     print(`√ 已停止查找设备！`);
     return [null, res];
@@ -124,7 +124,7 @@ function stopSearchBle() {
 
 function connectBle(this: any) {
   print(`准备连接新设备..., deviceId: ${this.deviceId}`);
-  return promisify(wx.createBLEConnection,
+  return promisify(uni.createBLEConnection,
   {
     deviceId: this.deviceId,
   }).then((res) => {
@@ -139,7 +139,7 @@ function connectBle(this: any) {
 
 function closeBleConnection(this: any) {
   print(`断开蓝牙连接...`);
-  return promisify(wx.closeBLEConnection, {
+  return promisify(uni.closeBLEConnection, {
     deviceId: this.deviceId
   }).then((res) => {
     print(`√ 断开蓝牙连接成功！`);
@@ -153,7 +153,7 @@ function closeBleConnection(this: any) {
 
 function getBleServices(this: any) {
   print(`获取蓝牙设备所有服务...`);
-  return promisify(wx.getBLEDeviceServices, {
+  return promisify(uni.getBLEDeviceServices, {
     deviceId: this.deviceId,
   }).then((res: any) => {
     print(`√ 获取service成功`);
@@ -174,7 +174,7 @@ function getBleServices(this: any) {
 
 function getCharacteristics(this: any) {
   print(`开始获取蓝牙特征值...\n serviceId: ${this.serviceId}`);
-  return promisify(wx.getBLEDeviceCharacteristics, {
+  return promisify(uni.getBLEDeviceCharacteristics, {
     deviceId: this.deviceId,
     serviceId: this.serviceId
   }).then((res: any) => {
@@ -199,20 +199,20 @@ function getCharacteristics(this: any) {
         print(`notifyCharacteristicId:${item.uuid}`);
       }
     }
-    wx.setStorageSync("bluestatus", "on");
+    uni.setStorageSync("bluestatus", "on");
 
     return [null, res];
   }).catch((err) => {
     const errMsg = getErrorMsg(err);
     print(`× 获取蓝牙特征值失败! ${errMsg}`);
-    wx.setStorageSync("bluestatus", "");
+    uni.setStorageSync("bluestatus", "");
     return [errMsg, null];
   });
 }
 
 function notifyBleCharacteristicValueChange(this: any) {
   print(`开始订阅蓝牙特征值...\ncharacteristicId: ${this.notifyCharacteristicId}\n deviceId:${this.deviceId}\nserviceId:${this.serviceId}`);
-  return promisify(wx.notifyBLECharacteristicValueChange, {
+  return promisify(uni.notifyBLECharacteristicValueChange, {
     characteristicId: this.notifyCharacteristicId,
     deviceId: this.deviceId,
     serviceId: this.serviceId,
@@ -243,7 +243,7 @@ function onBleCharacteristicValueChange(this: any) {
 function _onBleCharacteristicValueChange (this: any) {
   let lastDate = new Date().getTime();
   return new Promise((resolve, reject) => {
-    wx.onBLECharacteristicValueChange((result) => {
+    uni.onBLECharacteristicValueChange((result) => {
       const arrbf = new Uint8Array(result.value);
       const nowDate = new Date().getTime();
       print(`接收硬件的数据反馈：命令码为：${arrbf[3]}`);
@@ -263,7 +263,7 @@ function _onBleCharacteristicValueChange (this: any) {
 
 
 function writeBLECharacteristicValue(this: any, mudata) {
-  return promisify(wx.writeBLECharacteristicValue, {
+  return promisify(uni.writeBLECharacteristicValue, {
     deviceId: this.deviceId,
     serviceId: this.serviceId,
     characteristicId: this.writeCharacteristicId,

@@ -1,5 +1,6 @@
-import { IBleOptions } from './ble';
-import wxble from './ble-weixin-api';
+import { IBleOptions, EClientType } from './ble';
+import wxAppBle from './ble-weixin-api';
+import uniAppBle from './ble-uniapp-api';
 import { cleanSentOrder } from './utils';
 
 interface BLEEmitter {
@@ -18,17 +19,20 @@ class BleCore {
   notifyCharacteristicId: string; // 可订阅特征值id
   deviceId: string; // 蓝牙设备id
   serviceId: string; // 服务id
+  clientType: EClientType; // 使用端类型
 
   module; // 适配器的模块
 
   constructor(options: IBleOptions, emitter) {
     const {
       bleName,
-      serviceIdCondition
+      serviceIdCondition,
+      clientType
     } = options;
 
     this.bleName = bleName;
     this.emitter = emitter;
+    this.clientType = clientType;
 
     this.readCharacteristicId = "";
     this.writeCharacteristicId = "";
@@ -41,8 +45,14 @@ class BleCore {
   }
 
   getModule() {
-    // TODO 通过条件去区分处理， 后面要增加uniapp支持的API
-    return wxble;
+    // 通过条件去区分处理， 后面要增加uniapp支持的API
+    if (this.clientType == EClientType.weixin) {
+      return wxAppBle;
+    }
+    
+    if (this.clientType == EClientType.uniapp) {
+      return uniAppBle;
+    }
   }
 
   // 打开蓝牙适配器状态监听
@@ -149,14 +159,12 @@ class BleCore {
       });
       this.closeBleConnection();
       this.closeBleAdapter();
-      // wx.setStorage("bluestatus", "");
       return;
     }
     this.emitter.emit("channel", {
       type: "connect",
       data: "蓝牙已连接"
     });
-    // wx.setStorage("bluestatus", "on");
     return true;
   }
   // 订阅蓝牙特征值
