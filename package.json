@@ -1,0 +1,42 @@
+{
+  "name": "applets-ble",
+  "version": "1.1.0",
+  "description": "uniapp 和 微信小程序蓝牙连接核心操作封装模块处理，可快速接入其他设备的蓝牙操作",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.mjs",
+  "scripts": {
+    "dev": "rimraf dist && rollup -c -w",
+    "build": "rimraf dist && rollup -c",
+    "changelog": "standard-version",
+    "docs": "rimraf docs && typedoc --tsconfig tsconfig.json --options typedoc.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lianhr12/applets-ble.git"
+  },
+  "keywords": [
+    "ble",
+    "uniapp ble",
+    "wxapp ble"
+  ],
+  "author": "Rope (lhr9311@163.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lianhr12/applets-ble/issues"
+  },
+  "homepage": "https://github.com/lianhr12/applets-ble#readme",
+  "devDependencies": {
+    "@types/wechat-miniprogram": "^3.4.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.79.1",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-typescript2": "^0.34.0",
+    "rollup-plugin-uglify": "^6.0.4",
+    "standard-version": "^9.5.0",
+    "typedoc": "^0.23.15",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "eventemitter2": "^6.4.9"
+  }
+}
