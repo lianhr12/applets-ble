@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/lianhr12/applets-ble#readme",
   "devDependencies": {
+    "@types/uni-app": "^1.4.4",
     "@types/wechat-miniprogram": "^3.4.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.79.1",
