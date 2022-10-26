@@ -97,7 +97,6 @@ function _onBluetoothFoundPromise(this: any) {
       if (count > 1) {
         devices.forEach((item) => {
           let name = item.name || item.localName || '';
-          console.log(name, 11212);
           if (this.bleName.indexOf(name) > -1) {
             print(`已嗅探到符合条件的设备：${item.name}: ${item.deviceId}`)
             this.deviceId = item.deviceId;
