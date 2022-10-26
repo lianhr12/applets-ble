@@ -15,7 +15,7 @@ yarn add applets-ble -S
 根据模块使用工具库，下面简单举例：
 ES Module
 ```javascript
-import businessTool from 'applets-ble';
+import { BLE } from 'applets-ble';
 // 适配的蓝牙名称集合
 const bluetoothName = [
     "XXX" // 要搜索的蓝牙名称
@@ -54,7 +54,7 @@ ble.send();
 
 CommonJS
 ```javascript
-const BLE = require('applets-ble');
+const { BLE } = require('applets-ble');
 // 适配的蓝牙名称集合
 const bluetoothName = [
     "XXX" // 要搜索的蓝牙名称
@@ -89,6 +89,22 @@ ble.close();
 
 // 发送指令
 ble.send();
+```
+
+## 微信小程序使用npm包
+### 1、 安装 npm 包
+```bash
+# 前提已经npm init或存在package.json文件
+npm install applets-ble -S
+```
+
+### 2、构建npm
+点击开发者工具IDE中的菜单栏：工具 --> 构建 npm
+
+### 3、构建完成后即可使用 npm 包。
+```javascript
+import { BLE } from 'applets-ble';
+// 调用模块方法
 ```
 
 ## API文档
